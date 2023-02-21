@@ -41,7 +41,7 @@ this feature was achieved by using the geocoding and geolocator packages, to acc
 
 ### Screenshots
 
-| <img src="onboard.jpeg" width="200" height="100"> | 
+| <img src="onboard.jpeg" width="300" height="300"> | 
 
 
 | <img src="home-view.jpeg" width="80" height="60"> | 
