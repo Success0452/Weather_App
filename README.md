@@ -44,15 +44,15 @@ this feature was achieved by using the geocoding and geolocator packages, to acc
 | <img src="onboard.jpeg" width="300" height="300"> | 
 
 
-| <img src="home-view.jpeg" width="80" height="60"> | 
+| <img src="home-view.jpeg" width="300" height="300"> | 
 
 
 
-| <img src="details-view.jpeg" width="80" height="60"> |
+| <img src="details-view.jpeg" width="300" height="300"> |
 
 
 
-| <img src="carousel-view.jpeg" width="80" height="60">
+| <img src="carousel-view.jpeg" width="300" height="300">
 
 ## How it works
 - The application needs to load the weather data from the server(through api) through the internet to display to the user.
