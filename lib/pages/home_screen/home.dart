@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<LocalController>().readCities();
+    context.read<HomeController>().refresh();
     super.initState();
   }
 
@@ -120,6 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       desiredAccuracy: LocationAccuracy.high)
                                   .then((Position position) {
                                 value.getCurrentAddress(position);
+                              }).then((value) {
                                 Get.toNamed(RouteHelper.getDetailsPage(),
                                     arguments: {'current': true});
                               });

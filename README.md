@@ -39,6 +39,21 @@ Using the carousel/tab view, data were displayed to the users with the option of
 `A feature to use “Current Location” to display the weather information. This will detect the user's currentlocation, get the geolocation, and call the API using longitude and latitude.`
 this feature was achieved by using the geocoding and geolocator packages, to access the user location which strongly depends on the user agreeing to share their location and with the lat and lng of their location, they are able to see the weather condition of their location 
 
+### Screenshots
+
+| <img src="onboard.jpeg" width="80" height="60"> | 
+
+
+| <img src="home-view.jpeg" width="80" height="60"> | 
+
+
+
+| <img src="details-view.jpeg" width="80" height="60"> |
+
+
+
+| <img src="carousel-view.jpeg" width="80" height="60">
+
 ## How it works
 - The application needs to load the weather data from the server(through api) through the internet to display to the user.
 - From the splash screen to the onboarding page where information about the application is displayed to the user
