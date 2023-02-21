@@ -1,0 +1,270 @@
+import 'package:flutter/material.dart';
+import 'package:foodcourt/controller/home_controller.dart';
+import 'package:foodcourt/util/colors.dart';
+import 'package:foodcourt/util/dimensions.dart';
+import 'package:foodcourt/widgets/big_text.dart';
+import 'package:foodcourt/widgets/custom_button.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+class DetailsMainPage extends StatefulWidget {
+  final bool? cancel;
+  final int index;
+  const DetailsMainPage({super.key, this.cancel, required this.index});
+
+  @override
+  State<DetailsMainPage> createState() => _DetailsMainPageState();
+}
+
+class _DetailsMainPageState extends State<DetailsMainPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<HomeController>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: Dimensions.height20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: Dimensions.height20 * 2,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Icon(
+                        Icons.location_searching,
+                        size: Dimensions.icon24,
+                        color: Colors.yellow,
+                      ),
+                      Text(
+                        value.cities[widget.index]['cityName'].toString(),
+                        style: TextStyle(
+                            color: Colors.yellow,
+                            fontSize: Dimensions.font26 * 1.3,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: Dimensions.height20,
+                      ),
+                      ButtonWidget(
+                        text: value.cities[widget.index]['weather'].toString(),
+                        color: Colors.yellow[800]!,
+                        width: Dimensions.width40 * 12,
+                        height: Dimensions.height40 * 1.3,
+                        pressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height: Dimensions.height40 * 10,
+                                child: ListView.builder(
+                                    itemCount: context
+                                        .read<HomeController>()
+                                        .cities
+                                        .length,
+                                    itemBuilder: ((context, index) {
+                                      return Container(
+                                          height: Dimensions.height40 * 1.5,
+                                          width: Dimensions.width40,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions.radius20)),
+                                          child: Center(
+                                              child: TextButton(
+                                                  onPressed: () {},
+                                                  child: BigText(
+                                                    text: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['cityName'],
+                                                    color: AppColors.white,
+                                                  ))));
+                                    })),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: Dimensions.height20,
+                      ),
+                      Text(
+                        '${value.cities[widget.index]['temp'].toString()} \u2103',
+                        style: GoogleFonts.mulish(
+                            color: AppColors.white,
+                            fontSize: Dimensions.font26 * 1.5,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: Dimensions.height20,
+                      ),
+                      Text(
+                        value.cities[widget.index]['weather'].toString(),
+                        style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: Dimensions.font26,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: Dimensions.height20,
+                      ),
+                      ButtonWidget(
+                        text: value.cities[widget.index]['cityName'].toString(),
+                        color: Colors.yellow[800]!,
+                        width: Dimensions.width40 * 12,
+                        height: Dimensions.height40 * 1.3,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: Dimensions.height20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: Dimensions.width25,
+                            ),
+                            Icon(
+                              Icons.thunderstorm_outlined,
+                              size: Dimensions.icon24,
+                              color: AppColors.white,
+                            ),
+                            SizedBox(
+                              width: Dimensions.width15,
+                            ),
+                            Text(
+                              "Today  Cloudy",
+                              style: TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: Dimensions.font15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: Dimensions.width25),
+                          child: Text(
+                            value.cities[widget.index]['cloud'].toString(),
+                            style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: Dimensions.font15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: Dimensions.height20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: Dimensions.width25,
+                            ),
+                            Icon(
+                              Icons.thunderstorm_outlined,
+                              size: Dimensions.icon24,
+                              color: AppColors.white,
+                            ),
+                            SizedBox(
+                              width: Dimensions.width15,
+                            ),
+                            Text(
+                              "Today  Humidity",
+                              style: TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: Dimensions.font15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: Dimensions.width25),
+                          child: Text(
+                            "${value.cities[widget.index]['humidity'].toString()} \u2103",
+                            style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: Dimensions.font15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: Dimensions.height20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: Dimensions.width25,
+                            ),
+                            Icon(
+                              Icons.thunderstorm_outlined,
+                              size: Dimensions.icon24,
+                              color: AppColors.white,
+                            ),
+                            SizedBox(
+                              width: Dimensions.width15,
+                            ),
+                            Text(
+                              "Pressure",
+                              style: TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: Dimensions.font15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: Dimensions.width25),
+                          child: Text(
+                            'P: ${value.cities[widget.index]['pressure'].toString()} \u2103',
+                            style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: Dimensions.font15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: Dimensions.height15,
+                  ),
+                  ButtonWidget(
+                    text: "Forecast",
+                    color: Colors.yellow[800]!,
+                    width: Dimensions.width40 * 12,
+                    height: Dimensions.height40 * 1.3,
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
