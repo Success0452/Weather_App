@@ -34,126 +34,249 @@ class _DetailsTopLevelState extends State<DetailsTopLevel> {
             padding: EdgeInsets.only(
                 top: Dimensions.height15, bottom: Dimensions.height15),
             child: storageList!.isNotEmpty
-                ?
-                // displays when savedList is not empty to show the data to the users
-                CarouselSlider(
+                ? CarouselSlider(
                     options: CarouselOptions(
                         height: Dimensions.height40 * 4,
                         enableInfiniteScroll: false),
                     items: storageList!.map((i) {
                       return Builder(
                         builder: (BuildContext context) {
-                          return
-                              // houses the item to be showed to the user
-                              Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: Dimensions.height5),
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage(i.weather! == "haze"
-                                              ? 'assets/images/tree-sunlight-bg.jpg'
-                                              : i.weather! == "scattered clouds"
-                                                  ? 'assets/images/thunderbolt-lighting-bg.png'
-                                                  : i.weather! == "clear sky"
-                                                      ? 'assets/images/cloudy_bg.jpg'
+                          return Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.height5),
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(i.weather! == "haze"
+                                          ? 'assets/images/tree-sunlight-bg.jpg'
+                                          : i.weather! == "scattered clouds"
+                                              ? 'assets/images/thunderbolt-lighting-bg.png'
+                                              : i.weather! == "clear sky"
+                                                  ? 'assets/images/cloudy_bg.jpg'
+                                                  : i.weather! ==
+                                                          "broken clouds"
+                                                      ? 'assets/images/thunderstorm2-bg.jpg'
                                                       : i.weather! ==
-                                                              "broken clouds"
-                                                          ? 'assets/images/thunderstorm2-bg.jpg'
-                                                          : i.weather! ==
-                                                                  "few clouds"
-                                                              ? 'assets/images/thunderstorm-bg.jpg'
-                                                              : 'assets/images/cloudy_bg.jpg'),
-                                          fit: BoxFit.cover),
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.radius20)),
-                                  child: Column(
+                                                              "few clouds"
+                                                          ? 'assets/images/thunderstorm-bg.jpg'
+                                                          : 'assets/images/cloudy_bg.jpg'),
+                                      fit: BoxFit.cover),
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.radius20)),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                top: Dimensions.height10,
-                                                bottom: Dimensions.height10,
-                                                right: Dimensions.width10,
-                                                left: Dimensions.width10),
-                                            child: GestureDetector(
-                                              onTap: (() {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      dialog(),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: Dimensions.height10,
+                                            bottom: Dimensions.height10,
+                                            right: Dimensions.width10,
+                                            left: Dimensions.width10),
+                                        child: GestureDetector(
+                                          onTap: (() {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return SizedBox(
+                                                  height:
+                                                      Dimensions.height40 * 10,
+                                                  child: ListView.builder(
+                                                      itemCount: context
+                                                          .read<
+                                                              HomeController>()
+                                                          .cities
+                                                          .length,
+                                                      itemBuilder:
+                                                          ((context, index) {
+                                                        return Container(
+                                                            height: Dimensions
+                                                                    .height40 *
+                                                                1.5,
+                                                            width: Dimensions
+                                                                .width40,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        Dimensions
+                                                                            .radius20)),
+                                                            child: Center(
+                                                                child:
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          context
+                                                                              .read<HomeController>()
+                                                                              .insertItem(context.read<HomeController>().cities[index]['cityName']);
+                                                                          var request =
+                                                                              CitiesModel(
+                                                                            cityName:
+                                                                                context.read<HomeController>().cities[index]['cityName'],
+                                                                            cloud:
+                                                                                context.read<HomeController>().cities[index]['cloud'],
+                                                                            humidity:
+                                                                                context.read<HomeController>().cities[index]['humidity'],
+                                                                            lat:
+                                                                                context.read<HomeController>().cities[index]['lat'],
+                                                                            lng:
+                                                                                context.read<HomeController>().cities[index]['lng'],
+                                                                            pressure:
+                                                                                context.read<HomeController>().cities[index]['pressure'],
+                                                                            temp:
+                                                                                context.read<HomeController>().cities[index]['temp'],
+                                                                            weather:
+                                                                                context.read<HomeController>().cities[index]['weather'],
+                                                                          );
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                          setState(
+                                                                              () {
+                                                                            storageList!.add(request);
+                                                                          });
+                                                                        },
+                                                                        child:
+                                                                            BigText(
+                                                                          text: context
+                                                                              .read<HomeController>()
+                                                                              .citiesModel![index]
+                                                                              .cityName!,
+                                                                          color:
+                                                                              AppColors.white,
+                                                                        ))));
+                                                      })),
                                                 );
-                                              }),
-                                              child: Icon(
-                                                Icons
-                                                    .add_circle_outline_outlined,
-                                                size: Dimensions.radius20 * 1.2,
-                                                color: AppColors.white,
-                                              ),
-                                            ),
+                                              },
+                                            );
+                                          }),
+                                          child: Icon(
+                                            Icons.add_circle_outline_outlined,
+                                            size: Dimensions.radius20 * 1.2,
+                                            color: AppColors.white,
                                           ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                top: Dimensions.height10,
-                                                bottom: Dimensions.height10,
-                                                right: Dimensions.width10,
-                                                left: Dimensions.width10),
-                                            child: GestureDetector(
-                                              onTap: (() {
-                                                context
-                                                    .read<LocalController>()
-                                                    .deleteCities(i.cityName!);
-                                                Navigator.of(context).pop();
-                                                setState(() {
-                                                  storageList!.removeWhere(
-                                                      (element) =>
-                                                          element.cityName ==
-                                                          i.cityName);
-                                                });
-                                              }),
-                                              child: Icon(
-                                                Icons.cancel_outlined,
-                                                size: Dimensions.radius20 * 1.2,
-                                                color: AppColors.white,
-                                              ),
-                                            ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: Dimensions.height10,
+                                            bottom: Dimensions.height10,
+                                            right: Dimensions.width10,
+                                            left: Dimensions.width10),
+                                        child: GestureDetector(
+                                          onTap: (() {
+                                            context
+                                                .read<LocalController>()
+                                                .deleteCities(i.cityName!);
+                                            setState(() {
+                                              storageList!.removeWhere(
+                                                  (element) =>
+                                                      element.cityName ==
+                                                      i.cityName);
+                                            });
+                                          }),
+                                          child: Icon(
+                                            Icons.cancel_outlined,
+                                            size: Dimensions.radius20 * 1.2,
+                                            color: AppColors.white,
                                           ),
-                                        ],
-                                      ),
-                                      BigText(
-                                        text: i.cityName!,
-                                        color: AppColors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      BigText(
-                                        text: '${i.temp!} \u2103',
-                                        color: AppColors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      BigText(
-                                        text: i.weather!,
-                                        color: AppColors.white,
-                                        fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ],
-                                  ));
+                                  ),
+                                  BigText(
+                                    text: i.cityName!,
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  BigText(
+                                    text: '${i.temp!} \u2103',
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  BigText(
+                                    text: i.weather!,
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ],
+                              ));
                         },
                       );
                     }).toList(),
                   )
-                :
-                // displays when the savedList is empty, to enable user add to savedList
-                Padding(
+                : Padding(
                     padding: EdgeInsets.only(
                         left: Dimensions.width20, right: Dimensions.width20),
                     child: GestureDetector(
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) => dialog(),
+                          builder: (context) {
+                            return SizedBox(
+                              height: Dimensions.height40 * 10,
+                              child: ListView.builder(
+                                  itemCount: context
+                                      .read<HomeController>()
+                                      .cities
+                                      .length,
+                                  itemBuilder: ((context, index) {
+                                    return Container(
+                                        height: Dimensions.height40 * 1.5,
+                                        width: Dimensions.width40,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radius20)),
+                                        child: Center(
+                                            child: TextButton(
+                                                onPressed: () {
+                                                  context
+                                                      .read<HomeController>()
+                                                      .insertItem(context
+                                                              .read<
+                                                                  HomeController>()
+                                                              .cities[index]
+                                                          ['cityName']);
+                                                  var request = CitiesModel(
+                                                    cityName: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['cityName'],
+                                                    cloud: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['cloud'],
+                                                    humidity: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['humidity'],
+                                                    lat: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['lat'],
+                                                    lng: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['lng'],
+                                                    pressure: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['pressure'],
+                                                    temp: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['temp'],
+                                                    weather: context
+                                                        .read<HomeController>()
+                                                        .cities[index]['weather'],
+                                                  );
+                                                  setState(() {
+                                                    storageList!.add(request);
+                                                  });
+                                                },
+                                                child: BigText(
+                                                  text: context
+                                                      .read<HomeController>()
+                                                      .citiesModel![index]
+                                                      .cityName!,
+                                                  color: AppColors.white,
+                                                ))));
+                                  })),
+                            );
+                          },
                         );
                       },
                       child: Row(
@@ -179,60 +302,6 @@ class _DetailsTopLevelState extends State<DetailsTopLevel> {
                     ),
                   ));
       }),
-    );
-  }
-
-  dialog() {
-    SizedBox(
-      height: Dimensions.height40 * 10,
-      child: ListView.builder(
-          itemCount: context.read<HomeController>().cities.length,
-          itemBuilder: ((context, index) {
-            return Container(
-                height: Dimensions.height40 * 1.5,
-                width: Dimensions.width40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.radius20)),
-                child: Center(
-                    child: TextButton(
-                        onPressed: () {
-                          context.read<HomeController>().insertItem(context
-                              .read<HomeController>()
-                              .cities[index]['cityName']);
-                          var request = CitiesModel(
-                            cityName: context
-                                .read<HomeController>()
-                                .cities[index]['cityName'],
-                            cloud: context.read<HomeController>().cities[index]
-                                ['cloud'],
-                            humidity: context
-                                .read<HomeController>()
-                                .cities[index]['humidity'],
-                            lat: context.read<HomeController>().cities[index]
-                                ['lat'],
-                            lng: context.read<HomeController>().cities[index]
-                                ['lng'],
-                            pressure: context
-                                .read<HomeController>()
-                                .cities[index]['pressure'],
-                            temp: context.read<HomeController>().cities[index]
-                                ['temp'],
-                            weather: context
-                                .read<HomeController>()
-                                .cities[index]['weather'],
-                          );
-                          setState(() {
-                            storageList!.add(request);
-                          });
-                        },
-                        child: BigText(
-                          text: context
-                              .read<HomeController>()
-                              .citiesModel![index]
-                              .cityName!,
-                          color: AppColors.white,
-                        ))));
-          })),
     );
   }
 }

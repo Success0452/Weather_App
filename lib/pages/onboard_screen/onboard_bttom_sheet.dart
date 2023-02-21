@@ -44,8 +44,8 @@ class OnboardBottomSheet extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   if (isLastPage) {
-                    Get.offAllNamed(RouteHelper.getHomePage());
                     GetStorage().write('onboard', 'viewed');
+                    Get.offAllNamed(RouteHelper.getHomePage());
                   } else {
                     controller.nextPage(
                         duration: const Duration(microseconds: 500),

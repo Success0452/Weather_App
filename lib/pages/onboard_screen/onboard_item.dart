@@ -35,8 +35,8 @@ class OnboardItem extends StatelessWidget {
                 children: [
                   TextButton(
                       onPressed: () {
-                        Get.offAllNamed(RouteHelper.getHomePage());
                         GetStorage().write('onboard', 'viewed');
+                        Get.offAllNamed(RouteHelper.getHomePage());
                       },
                       child: const SmallText(
                         text: "Skip",

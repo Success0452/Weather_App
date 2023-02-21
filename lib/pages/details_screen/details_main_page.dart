@@ -61,39 +61,7 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         color: Colors.yellow[800]!,
                         width: Dimensions.width40 * 12,
                         height: Dimensions.height40 * 1.3,
-                        pressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return SizedBox(
-                                height: Dimensions.height40 * 10,
-                                child: ListView.builder(
-                                    itemCount: context
-                                        .read<HomeController>()
-                                        .cities
-                                        .length,
-                                    itemBuilder: ((context, index) {
-                                      return Container(
-                                          height: Dimensions.height40 * 1.5,
-                                          width: Dimensions.width40,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions.radius20)),
-                                          child: Center(
-                                              child: TextButton(
-                                                  onPressed: () {},
-                                                  child: BigText(
-                                                    text: context
-                                                        .read<HomeController>()
-                                                        .cities[index]['cityName'],
-                                                    color: AppColors.white,
-                                                  ))));
-                                    })),
-                              );
-                            },
-                          );
-                        },
+                        pressed: () {},
                       ),
                       SizedBox(
                         height: Dimensions.height20,

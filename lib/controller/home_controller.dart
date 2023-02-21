@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:foodcourt/controller/local_controller.dart';
 import 'package:foodcourt/model/cities_model.dart';
@@ -21,6 +23,7 @@ class HomeController extends ChangeNotifier {
 
   // variable to monitor loading bar
   var loadState = ValueNotifier(false);
+  var exceptionState = ValueNotifier(false);
 
   // list variables
   WeatherModel? weatherInformation;
@@ -55,6 +58,12 @@ class HomeController extends ChangeNotifier {
         .where((element) =>
             element['cityName'].toString().startsWith(searchWord.text))
         .toList();
+    searchList = cities
+        .where((element) => element['cityName']
+            .toString()
+            .toLowerCase()
+            .startsWith(searchWord.text))
+        .toList();
     debugPrint(searchList.length.toString());
     notifyListeners();
   }
@@ -67,9 +76,9 @@ class HomeController extends ChangeNotifier {
 
   checkItemWithIndex(String cityName) {
     for (int i = 0; i < cities.length; i++) {
-      if (cities[i]['cityName'] == cityName) {
-        GetStorage().write('index',
-            cities.indexWhere((element) => element['cityName'] == cityName));
+      if (cities[i]['cityName'].toString() ==
+          cityName.toString().removeAllWhitespace) {
+        GetStorage().write('index', i);
       }
     }
   }
@@ -171,11 +180,17 @@ class HomeController extends ChangeNotifier {
         getAddressFromLatLng(currentPosition!);
       }).catchError((e) {
         loadState.value = false;
-        debugPrint(e);
       });
-    } catch (e) {
-      Get.snackbar('info', 'server error',
-          duration: const Duration(milliseconds: 1000));
+    } on TimeoutException catch (_) {
+      Get.snackbar('info', _.message!,
+          duration: const Duration(milliseconds: 1500));
+      exceptionState.value = true;
+      loadState.value = true;
+    } on SocketException catch (_) {
+      Get.snackbar('info', _.message,
+          duration: const Duration(milliseconds: 1500));
+      exceptionState.value = true;
+      loadState.value = false;
     }
     notifyListeners();
   }
@@ -188,7 +203,7 @@ class HomeController extends ChangeNotifier {
       Placemark place = placemarks[0];
       debugPrint(place.locality);
       currentAddress.value =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}';
+          '${place.street}, ${place.subLocality}, ${place.locality}';
 
       for (var index = 0; index < cities.length; index++) {
         getWeatherConditionWithName(
