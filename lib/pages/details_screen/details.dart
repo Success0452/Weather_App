@@ -3,6 +3,7 @@ import 'package:foodcourt/controller/local_controller.dart';
 import 'package:foodcourt/pages/details_screen/details_main_page.dart';
 import 'package:foodcourt/pages/details_screen/details_top_level.dart';
 import 'package:foodcourt/util/colors.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   int index = GetStorage().read("index");
+  bool current = Get.arguments['current'] ?? false;
 
   @override
   void initState() {
@@ -33,7 +35,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           DetailsTopLevel(index: index),
 
           // main page implementation
-          DetailsMainPage(index: index, cancel: false)
+          DetailsMainPage(index: index, cancel: false, current: current)
         ],
       )),
     );

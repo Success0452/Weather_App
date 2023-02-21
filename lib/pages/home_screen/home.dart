@@ -9,8 +9,8 @@ import 'package:foodcourt/widgets/big_text.dart';
 import 'package:foodcourt/widgets/custom_button.dart';
 import 'package:foodcourt/widgets/custom_textfield.dart';
 import 'package:foodcourt/widgets/small_text.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,10 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: AppColors.primaryColor,
           body: SafeArea(
               child: RefreshIndicator(
-            onRefresh: () {
-              // reload the weather details
-              return context.read<HomeController>().getCurrentPosition();
-            },
+            onRefresh: () => value.refresh(),
             child: ListView(
               padding: EdgeInsets.only(
                   left: Dimensions.width25, right: Dimensions.width25),
@@ -117,17 +114,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.yellow[800]!,
                           width: Dimensions.width40 * 5,
                           height: Dimensions.height40,
-                          pressed: () {
+                          pressed: () async {
                             if (ref == false) {
-                              for (int i = 0; i < value.cities.length; i++) {
-                                if (value.cities[i]['cityName'].toString() ==
-                                    value.currentAddress.value
-                                        .split(',')[2]
-                                        .removeAllWhitespace) {
-                                  GetStorage().write('index', i);
-                                  Get.toNamed(RouteHelper.getDetailsPage());
-                                }
-                              }
+                              await Geolocator.getCurrentPosition(
+                                      desiredAccuracy: LocationAccuracy.high)
+                                  .then((Position position) {
+                                value.getCurrentAddress(position);
+                                Get.toNamed(RouteHelper.getDetailsPage(),
+                                    arguments: {'current': true});
+                              });
                             } else {
                               Get.snackbar('info', 'loading',
                                   duration: const Duration(milliseconds: 500));

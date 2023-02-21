@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 class DetailsMainPage extends StatefulWidget {
   final bool? cancel;
   final int index;
-  const DetailsMainPage({super.key, this.cancel, required this.index});
+  final bool? current;
+  const DetailsMainPage(
+      {super.key, this.cancel, required this.index, this.current});
 
   @override
   State<DetailsMainPage> createState() => _DetailsMainPageState();
@@ -47,7 +49,9 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         color: Colors.yellow,
                       ),
                       Text(
-                        value.cities[widget.index]['cityName'].toString(),
+                        widget.current!
+                            ? value.currentDetails!.cityName!
+                            : value.cities[widget.index]['cityName'].toString(),
                         style: TextStyle(
                             color: Colors.yellow,
                             fontSize: Dimensions.font26 * 1.3,
@@ -57,7 +61,9 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         height: Dimensions.height20,
                       ),
                       ButtonWidget(
-                        text: value.cities[widget.index]['weather'].toString(),
+                        text: widget.current!
+                            ? value.currentDetails!.weather!
+                            : value.cities[widget.index]['weather'].toString(),
                         color: Colors.yellow[800]!,
                         width: Dimensions.width40 * 12,
                         height: Dimensions.height40 * 1.3,
@@ -67,7 +73,9 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         height: Dimensions.height20,
                       ),
                       Text(
-                        '${value.cities[widget.index]['temp'].toString()} \u2103',
+                        widget.current!
+                            ? '${value.currentDetails!.temp!} \u2103'
+                            : '${value.cities[widget.index]['temp'].toString()} \u2103',
                         style: GoogleFonts.mulish(
                             color: AppColors.white,
                             fontSize: Dimensions.font26 * 1.5,
@@ -77,7 +85,9 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         height: Dimensions.height20,
                       ),
                       Text(
-                        value.cities[widget.index]['weather'].toString(),
+                        widget.current!
+                            ? value.currentDetails!.weather!
+                            : value.cities[widget.index]['weather'].toString(),
                         style: TextStyle(
                             color: AppColors.white,
                             fontSize: Dimensions.font26,
@@ -87,7 +97,9 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         height: Dimensions.height20,
                       ),
                       ButtonWidget(
-                        text: value.cities[widget.index]['cityName'].toString(),
+                        text: widget.current!
+                            ? value.currentDetails!.cityName!
+                            : value.cities[widget.index]['cityName'].toString(),
                         color: Colors.yellow[800]!,
                         width: Dimensions.width40 * 12,
                         height: Dimensions.height40 * 1.3,
@@ -128,7 +140,10 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         Padding(
                           padding: EdgeInsets.only(right: Dimensions.width25),
                           child: Text(
-                            value.cities[widget.index]['cloud'].toString(),
+                            widget.current!
+                                ? value.currentDetails!.cloud!
+                                : value.cities[widget.index]['cloud']
+                                    .toString(),
                             style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: Dimensions.font15,
@@ -168,7 +183,9 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         Padding(
                           padding: EdgeInsets.only(right: Dimensions.width25),
                           child: Text(
-                            "${value.cities[widget.index]['humidity'].toString()} \u2103",
+                            widget.current!
+                                ? '${value.currentDetails!.humidity!} \u2103'
+                                : "${value.cities[widget.index]['humidity'].toString()} \u2103",
                             style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: Dimensions.font15,
@@ -208,7 +225,9 @@ class _DetailsMainPageState extends State<DetailsMainPage> {
                         Padding(
                           padding: EdgeInsets.only(right: Dimensions.width25),
                           child: Text(
-                            'P: ${value.cities[widget.index]['pressure'].toString()} \u2103',
+                            widget.current!
+                                ? 'P: ${value.currentDetails!.humidity!} \u2103'
+                                : 'P: ${value.cities[widget.index]['pressure'].toString()} \u2103',
                             style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: Dimensions.font15,

@@ -49,8 +49,10 @@ class _CarouselPageState extends State<CarouselPage> {
                             decoration: const BoxDecoration(
                                 color: AppColors.primaryColor),
                             child: DetailsMainPage(
-                                cancel: true,
-                                index: value.staticCites![index].index!));
+                              cancel: true,
+                              index: value.staticCites![index].index!,
+                              current: false,
+                            ));
                       },
                     );
                   }).toList(),

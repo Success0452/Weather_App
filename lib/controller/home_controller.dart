@@ -19,6 +19,7 @@ class HomeController extends ChangeNotifier {
 
   // variables to monitor currentAddress and currentPosition
   var currentAddress = ValueNotifier('');
+  CitiesModel? currentDetails;
   Position? currentPosition;
 
   // variable to monitor loading bar
@@ -51,6 +52,7 @@ class HomeController extends ChangeNotifier {
     {"cityName": "Ibadan"},
   ];
 
+  // function to search item on textfield
   searchUsers() {
     searchList.clear();
     debugPrint(cities.toString());
@@ -68,12 +70,14 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // function to clear search
   clearSearch() {
     searchWord.text = '';
     searchList.clear();
     notifyListeners();
   }
 
+  // function to get the index of a particular item
   checkItemWithIndex(String cityName) {
     for (int i = 0; i < cities.length; i++) {
       if (cities[i]['cityName'].toString() ==
@@ -83,6 +87,7 @@ class HomeController extends ChangeNotifier {
     }
   }
 
+  // function to insert item into the hive database(cities)
   Future<void> insertItem(String cityName) async {
     for (int i = 0; i < cities.length; i++) {
       if (cities[i]['cityName'] == cityName) {
@@ -100,6 +105,16 @@ class HomeController extends ChangeNotifier {
     }
   }
 
+  // function to refresh
+  refresh() async {
+    loadState.value = true;
+    for (int i = 0; i < cities.length; i++) {
+      getWeatherConditionWithName(cities[i]['cityName'].toString(), i);
+    }
+    loadState.value = false;
+  }
+
+  // function to add specific item into a list
   Future<void> insertStaticItem() async {
     staticCites = [
       CitiesModel(
@@ -196,32 +211,90 @@ class HomeController extends ChangeNotifier {
   }
 
   // function to retrieve address from provided lat and lng
-  Future<void> getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-            currentPosition!.latitude, currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
-      Placemark place = placemarks[0];
-      debugPrint(place.locality);
-      currentAddress.value =
-          '${place.street}, ${place.subLocality}, ${place.locality}';
+  Future<void> getCurrentAddress(Position position) async {
+    try {
+      await placemarkFromCoordinates(
+              currentPosition!.latitude, currentPosition!.longitude)
+          .then((List<Placemark> placemarks) {
+        Placemark place = placemarks[0];
+        debugPrint(place.locality);
+        currentAddress.value =
+            '${place.street}, ${place.subLocality}, ${place.locality}';
 
-      for (var index = 0; index < cities.length; index++) {
-        getWeatherConditionWithName(
-            cities[index]['cityName'].toString(), index);
-      }
-    }).catchError((e) {
-      debugPrint(e);
-    });
+        getCurrentWeatherCondition(position.latitude, position.longitude);
+      }).catchError((e) {
+        debugPrint(e);
+      });
+    } on TimeoutException catch (_) {
+      Get.snackbar('info', _.message!,
+          duration: const Duration(milliseconds: 1500));
+      exceptionState.value = true;
+      loadState.value = true;
+    } on SocketException catch (_) {
+      Get.snackbar('info', _.message,
+          duration: const Duration(milliseconds: 1500));
+      exceptionState.value = true;
+      loadState.value = false;
+    }
   }
 
-  // function to get the details of weather condition using latitutud and longitiude
-  Future<void> getWeatherConditionWithLatLng(
-      double lat, double lng, int index) async {
+  // function to retrieve address from provided lat and lng
+  Future<void> getAddressFromLatLng(Position position) async {
+    try {
+      await placemarkFromCoordinates(
+              currentPosition!.latitude, currentPosition!.longitude)
+          .then((List<Placemark> placemarks) {
+        Placemark place = placemarks[0];
+        debugPrint(place.locality);
+        currentAddress.value =
+            '${place.street}, ${place.subLocality}, ${place.locality}';
+
+        for (var index = 0; index < cities.length; index++) {
+          getWeatherConditionWithName(
+              cities[index]['cityName'].toString(), index);
+        }
+      }).catchError((e) {
+        debugPrint(e);
+      });
+    } on TimeoutException catch (_) {
+      Get.snackbar('info', _.message!,
+          duration: const Duration(milliseconds: 1500));
+      exceptionState.value = true;
+      loadState.value = true;
+    } on SocketException catch (_) {
+      Get.snackbar('info', _.message,
+          duration: const Duration(milliseconds: 1500));
+      exceptionState.value = true;
+      loadState.value = false;
+    }
+  }
+
+  // function to get the details of current weather condition using latitutud and longitiude
+  Future<void> getCurrentWeatherCondition(double lat, double lng) async {
     var response = await Server.get(HttpRoutes.currentWeaherWithCordinates,
         '?lat=$lat&lon=$lng&appid=${Constant.apiKey}');
 
     var decoded = json.decode(response);
-    cities[index].addAll({
+    currentDetails = CitiesModel(
+        cityName: decoded['name'].toString(),
+        cloud: decoded['clouds']['all'].toString(),
+        humidity: decoded['main']['humidity'].toString(),
+        lat: lat.toString(),
+        lng: lng.toString(),
+        pressure: decoded['main']['pressure'].toString(),
+        temp: decoded['main']['temp'].toString(),
+        weather: decoded['weather'][0]['description'].toString());
+    notifyListeners();
+  }
+
+  // function to get the details of weather condition using latitutud and longitiude
+  Future<void> getWeatherConditionWithLatLng(
+      double lat, double lng, int? index) async {
+    var response = await Server.get(HttpRoutes.currentWeaherWithCordinates,
+        '?lat=$lat&lon=$lng&appid=${Constant.apiKey}');
+
+    var decoded = json.decode(response);
+    cities[index!].addAll({
       "weather": decoded['weather'][0]['description'].toString(),
       "temp": decoded['main']['temp'].toString(),
       "humidity": decoded['main']['humidity'].toString(),

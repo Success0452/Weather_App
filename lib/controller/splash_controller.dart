@@ -10,7 +10,7 @@ class SplashController extends ChangeNotifier {
     loadState.value = true;
     await Future.delayed(const Duration(milliseconds: 5000));
 
-    if (GetStorage().read("onboard") == "viewed") {
+    if (GetStorage().read("onboard") != null) {
       Get.offAllNamed(RouteHelper.getHomePage());
       loadState.value = false;
     } else {
