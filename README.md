@@ -30,7 +30,7 @@ The List been created from the extraction in step 1 is been displayed into a Lis
 the data desired to user is queryed from https://openweathermap.org/ through the provided api which was invoked through http package provided by flutter 
 
 `Display 3 cities (ref: stated in Basic Requirement 1) weather data in a carousel/tab view`
-This functionality was achieved with communication with an Api endpoint to request for weather forecast data provided by www.webapi.com
+This functionality was achieved with communication with an Api endpoint to request for weather forecast data provided by https://openweathermap.org/
 and these data are been requested with http, the point of connection was established and data communication is been done.
 
 `Allow users to add/remove cities in the carousel/ tab view. The city selection can refer to: https://simplemaps.com/data/ng-cities || Cities in the carousel should be persisted. Once the app is killed and opened back, the list of cities is still the same`
